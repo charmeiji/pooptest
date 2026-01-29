@@ -17,3 +17,8 @@ desktop.ini
 *.tmp
 *.bak
 *~
+
+# Utility/development scripts
+create_template.py
+*_template.py
+*_utility.py
