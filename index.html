@@ -1,147 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
   <title>Home</title>
-  <link rel="stylesheet" href="css/styles.css">
-
-  <style>
-    :root{
-      --page-bg: #fff;
-      --panel-bg: #f8e4fa;      /* pale purple */
-      --border:  #ef46b5;       /* pink */
-      --inner:   #c180f9;       /* purple inner highlight */
-      --text:    #111;          /* black text */
-      --link:    #e639a7;       /* pink link */
-      --link-hover: #ad2fd2;    /* purple hover */
-    }
-
-    html, body { height: 100%; }
-    body{
-      margin: 0;
-      background: var(--page-bg);
-      color: var(--text);
-      font-family: Tahoma, Verdana, Arial, sans-serif;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .wrap{
-      width: 760px;
-      max-width: calc(100% - 24px);
-      margin: 16px auto;
-    }
-
-    .banner{
-      background: var(--panel-bg);
-      border: 2px solid var(--border);
-      box-shadow: 0 0 0 2px var(--inner) inset;
-    }
-
-    .banner-topbar{
-      padding: 6px 10px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(237,70,181,0.08), rgba(255,255,255,0));
-    }
-
-    .banner-img{
-      display: block;
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      image-rendering: pixelated;
-    }
-
-    .nav{
-      padding: 8px 10px 10px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .nav a{
-      color: var(--link);
-      text-decoration: none;
-      padding: 2px 6px;
-      border: 1px solid transparent;
-      transition: color 0.15s, background 0.15s, border-color 0.15s;
-    }
-
-    .nav a:hover{
-      border-color: var(--border);
-      background: rgba(193,128,249,0.10); /* subtle purple bg */
-      color: var(--link-hover);
-    }
-
-    main{
-      margin-top: 12px;
-      background: rgba(193,128,249,0.05); /* very light purple */
-      border: 1px solid rgba(230,57,167,0.14);
-      padding: 12px;
-    }
-
-    /* Art thumbnails spacing */
-    .art-grid{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-start;
-    }
-    .art-grid img{
-      display: block;
-      width: 150px;
-      height: auto;
-      border: 1px solid #ef46b530;
-      background: #fff;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="wrap">
-
-    <header class="banner">
-      <div class="banner-topbar">
-        <strong>Home</strong>
-      </div>
-
-      <!-- Replace with your real banner image path if you have one -->
-      <img class="banner-img" src="assets/banner.png" alt="Site banner">
-
-      <nav class="nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="blog.html">Blog</a>
-        <a href="art.html">Art</a>
-      </nav>
-    </header>
-
-    <main>
-      <h1>Home</h1>
-
-      <p>Welcome to my personal site. This is where I share blog posts and art updates.</p>
-
-      <h2>Latest Blog</h2>
-      <p>
-        <a href="blog.html#2024-01-15">Welcome to My Blog</a><br>
-        <a href="blog.html#2024-01-10">Getting Started</a><br>
-        <a href="blog.html#2024-01-05">Sample Post</a>
-      </p>
-
-      <h2>Latest Art</h2>
-      <div class="art-grid">
-        <a href="art.html#art-2024-01-15"><img src="art/placeholder1.jpg" alt="Sample Artwork 1" width="150"></a>
-        <a href="art.html#art-2024-01-10"><img src="art/placeholder2.jpg" alt="Sample Artwork 2" width="150"></a>
-        <a href="art.html#art-2024-01-05"><img src="art/placeholder3.jpg" alt="Sample Artwork 3" width="150"></a>
-        <a href="art.html#art-2024-01-01"><img src="art/placeholder4.jpg" alt="Sample Artwork 4" width="150"></a>
-        <a href="art.html#art-2023-12-28"><img src="art/placeholder5.jpg" alt="Sample Artwork 5" width="150"></a>
-        <a href="art.html#art-2023-12-25"><img src="art/placeholder6.jpg" alt="Sample Artwork 6" width="150"></a>
-      </div>
-    </main>
-
-  </div>
+  <h1>Home</h1>
+  
+  <nav>
+    <a href="index.html">Index</a> |
+    <a href="calendar.html">Calendar</a> |
+    <a href="blog.html">Blog</a> |
+    <a href="art.html">Art</a>
+  </nav>
 </body>
 </html>
