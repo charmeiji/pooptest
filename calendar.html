@@ -25,6 +25,12 @@
     #nav { width: 200px; padding-left: 20px; }
     #nav img { height: 50px; }
     #doodle-display.hidden { display: none; }
+    #left-meta { margin-top: 14px; font-size: 12px; }
+    .meta-block { margin-top: 10px; }
+    .meta-title { font-weight: bold; margin-bottom: 4px; }
+    .meta-text, #recent-list { opacity: 0.85; }
+    .recent-item { display:block; text-decoration:none; color: inherit; margin: 2px 0; }
+    .recent-item:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -158,6 +164,120 @@ function renderCalendar(year, monthIndex) {
 /* ---- 3) Render current month ---- */
 const now = new Date();
 renderCalendar(now.getFullYear(), now.getMonth());
+</script>
+
+<div id="left-meta">
+  <div class="meta-block" id="recent-block">
+    <div class="meta-title">Recent</div>
+    <div id="recent-list">(loading…)</div>
+  </div>
+
+  <div class="meta-block" id="legend-block">
+    <div class="meta-title">Legend</div>
+    <div class="meta-text">■ day with entry</div>
+    <div class="meta-text">□ empty day</div>
+  </div>
+
+  <div class="meta-block" id="status-block">
+    <div class="meta-title">Status</div>
+    <div class="meta-text" id="status-updated">last update: (loading…)</div>
+    <div class="meta-text" id="status-monthcount">entries this month: (loading…)</div>
+  </div>
+</div>
+
+<script>
+// Load entries.json and populate Recent + Status
+(async function() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const currentMonthStr = String(currentMonth + 1).padStart(2, "0");
+  const currentMonthYear = `${currentYear}-${currentMonthStr}`;
+  
+  let entries = [];
+  
+  try {
+    const response = await fetch('entries.json', { cache: "no-store" });
+    if (response.ok) {
+      entries = await response.json();
+    } else {
+      throw new Error('Not found');
+    }
+  } catch (error) {
+    document.getElementById("recent-list").textContent = "(no entries.json found)";
+    document.getElementById("status-updated").textContent = "last update: (no entries.json found)";
+    document.getElementById("status-monthcount").textContent = "entries this month: (no entries.json found)";
+    return;
+  }
+  
+  // Populate Status: last update
+  if (entries.length > 0) {
+    document.getElementById("status-updated").textContent = `last update: ${entries[0]}`;
+  } else {
+    document.getElementById("status-updated").textContent = "last update: (no entries)";
+  }
+  
+  // Populate Status: entries this month
+  const monthEntries = entries.filter(date => {
+    return date.startsWith(currentMonthYear);
+  });
+  document.getElementById("status-monthcount").textContent = `entries this month: ${monthEntries.length}`;
+  
+  // Populate Recent: last 5 entries
+  const recentEntries = entries.slice(0, 5);
+  const recentList = document.getElementById("recent-list");
+  recentList.innerHTML = "";
+  
+  if (recentEntries.length === 0) {
+    recentList.textContent = "(no entries)";
+  } else {
+    // Fetch each entry's first line
+    const promises = recentEntries.map(async (date) => {
+      try {
+        const response = await fetch(`entries/${date}.txt`, { cache: "no-store" });
+        if (response.ok) {
+          const text = await response.text();
+          const lines = text.split('\n');
+          let firstLine = "";
+          for (let i = 0; i < lines.length; i++) {
+            const trimmed = lines[i].trim();
+            if (trimmed) {
+              firstLine = trimmed;
+              break;
+            }
+          }
+          
+          if (!firstLine) {
+            firstLine = "(no text)";
+          } else if (firstLine.length > 40) {
+            firstLine = firstLine.substring(0, 40) + "…";
+          }
+          
+          return { date, microNote: firstLine };
+        } else {
+          return { date, microNote: "(no text)" };
+        }
+      } catch (error) {
+        return { date, microNote: "(no text)" };
+      }
+    });
+    
+    const results = await Promise.all(promises);
+    
+    results.forEach(({ date, microNote }) => {
+      const link = document.createElement("a");
+      link.className = "recent-item";
+      link.href = "#";
+      link.setAttribute("data-date", date);
+      link.textContent = `${date}  ${microNote}`;
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        showDoodle(date);
+      });
+      recentList.appendChild(link);
+    });
+  }
+})();
 </script>
 </div>
 
