@@ -1,0 +1,11 @@
+Daily Entry Template
+Date: YYYY-MM-DD
+
+Write your daily entry here.
+This is a template file - copy it and rename it to match the date format (e.g., 2026-01-25.txt).
+
+You can write multiple lines.
+The calendar will automatically convert newlines to line breaks.
+
+Keep it personal and reflective.
+Short lines work best for the display format.
