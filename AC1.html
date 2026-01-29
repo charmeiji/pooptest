@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --pink: #ef46b5;
+            --purple: #ad2fd2;
+        }
+        a {
+            color: var(--purple);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        a:hover, a:focus {
+            color: var(--pink);
+        }
+    </style>
+</head>
+<body>
+    <!-- HOW TO ADD NEW ART:
+    1) Upload image into /art/ (e.g. art/my_piece.png)
+    2) Copy the NEW ART TEMPLATE block and paste it above the previous entry
+    3) Edit filename/date/title/note. Save + upload art.html and the image file
+    -->
+
+    <!-- NEW ART TEMPLATE (copy this block):
+    <figure id="art-YYYY-MM-DD">
+        <a href="art/filename.jpg"><img src="art/filename.jpg" alt="Title" width="300"></a>
+        <p><strong>Title</strong> - YYYY-MM-DD</p>
+        <p>Optional note or description here.</p>
+    </figure>
+    <p>⊹˚₊‧───────────────‧₊˚⊹</p>
+    -->
+
+    <p>
+        <a href="index.html">Home</a> |
+        <a href="blog.html">Blog</a> |
+        <a href="art.html">Art</a>
+    </p>
+
+    <main>
+        <h1>Links</h1>
+
+        <figure id="art-2024-01-15">
+            <p><a href="https://www.instructables.com/Paper-Rug/" target="_blank" rel="nofollow"> Paper Rug Tutorial </a></p>            <p><strong>Sample Artwork 1</strong> - 2024-01-15</p>
+            <p>A test piece</p>
+        </figure>
+        <p>⊹˚₊‧───────────────‧₊˚⊹</p>
+
+        <figure id="art-2024-01-10">
+            <a href="art/placeholder2.jpg"><img src="art/placeholder2.jpg" alt="Sample Artwork 2" width="300"></a>
+            <p><strong>Sample Artwork 2</strong> - 2024-01-10</p>
+        </figure>
+        <p>⊹˚₊‧───────────────‧₊˚⊹</p>
+
+    </main>
+</body>
+</html>

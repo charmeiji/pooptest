@@ -1,0 +1,19 @@
+# IDE and editor files
+*.code-workspace
+.vscode/
+.idea/
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*~

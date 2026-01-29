@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Doodle</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 24px; }
+    img { max-width: 100%; height: auto; display: block; }
+  </style>
+</head>
+<body>
+  <a href="calendar.html">← Back to calendar</a>
+  <h1 id="title">Doodle</h1>
+  <img id="img" alt="Daily doodle" />
+
+  <script>
+    const date = new URLSearchParams(location.search).get("date");
+
+    if (!date) {
+      document.getElementById("title").textContent = "No date selected";
+      document.getElementById("img").remove();
+    } else {
+      document.getElementById("title").textContent = "Doodle — " + date;
+      const img = document.getElementById("img");
+      // Use special filename for 2026-01-25 to match existing art asset
+      img.src = (date === "2026-01-25") ? "art/26-1-25.png" : ("art/" + date + ".png");
+      img.onerror = () => {
+        document.getElementById("title").textContent = "No doodle found for " + date;
+        img.remove();
+      };
+    }
+  </script>
+</body>
+</html>

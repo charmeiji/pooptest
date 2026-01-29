@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Doodle Calendar</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      font-family:
+        "MS PGothic","MS Gothic",
+        "Osaka",
+        "Hiragino Kaku Gothic ProN",
+        "Meiryo",
+        sans-serif;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #111;
+      background: #fff;
+    }
+    #container { display: flex; }
+    #calendar-section { flex: 1; }
+    #doodle-display { padding-left: 20px; }
+    #nav { width: 200px; padding-left: 20px; }
+    #nav img { height: 50px; }
+    #doodle-display.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="container">
+<div id="calendar-section">
+<h1>Doodle Calendar</h1>
+
+<script>
+/* ---- 1) Put your doodle dates here (start with ONE) ---- */
+const DOODLE_DATES = [
+  "2026-01-25"
+];
+
+/* ---- Journal entries for each date ---- */
+const JOURNAL_ENTRIES = {
+  "2026-01-25": "Today's journal entry goes here."
+};
+
+/* ---- 2) Calendar template core (simplified from the template's approach) ---- */
+const monthnames = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+
+const monthdays = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+function isLeapYear(y) {
+  return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+}
+
+function showDoodle(date) {
+  const display = document.getElementById("doodle-display");
+  const img = document.getElementById("doodle-img");
+  const title = document.getElementById("doodle-title");
+  const journal = document.getElementById("doodle-journal");
+  
+  display.classList.remove("hidden");
+  title.textContent = date;
+  
+  // Use special filename for 2026-01-25 to match existing art asset
+  const imgSrc = (date === "2026-01-25") ? "art/26-1-25.png" : ("art/" + date + ".png");
+  img.src = imgSrc;
+  img.onerror = () => {
+    img.style.display = "none";
+  };
+  img.style.display = "block";
+  
+  // Show journal entry
+  if (JOURNAL_ENTRIES[date]) {
+    journal.innerHTML = JOURNAL_ENTRIES[date].replace(/\n/g, "<br>");
+    journal.style.display = "block";
+  } else {
+    journal.style.display = "none";
+  }
+}
+
+function renderCalendar(year, monthIndex) {
+  // monthIndex: 0-11
+  const first = new Date(year, monthIndex, 1);
+  const startDay = first.getDay(); // 0=Sun
+  let daysInMonth = monthdays[monthIndex];
+  if (monthIndex === 1 && isLeapYear(year)) daysInMonth = 29;
+
+  // Build quick lookup for dates that have doodles this month/year
+  const doodleSet = new Set(DOODLE_DATES);
+
+  document.write(`<h2>${monthnames[monthIndex]} ${year}</h2>`);
+  document.write(`<table border="2" cellpadding="8" cellspacing="0">`);
+  document.write(`<tr>
+    <th>Su</th><th>M</th><th>Tu</th><th>W</th><th>Th</th><th>F</th><th>Sa</th>
+  </tr>`);
+
+  let day = 1;
+  for (let row = 0; row < 6; row++) {
+    document.write("<tr>");
+    for (let col = 0; col < 7; col++) {
+      const cellIndex = row * 7 + col;
+
+      if (cellIndex < startDay || day > daysInMonth) {
+        document.write("<td>&nbsp;</td>");
+      } else {
+        const mm = String(monthIndex + 1).padStart(2, "0");
+        const dd = String(day).padStart(2, "0");
+        const iso = `${year}-${mm}-${dd}`;
+
+        if (doodleSet.has(iso)) {
+          document.write(`<td><a href="#" onclick="showDoodle('${iso}'); return false;">${day}</a></td>`);
+        } else {
+          document.write(`<td>${day}</td>`);
+        }
+        day++;
+      }
+    }
+    document.write("</tr>");
+    if (day > daysInMonth) break;
+  }
+
+  document.write("</table>");
+}
+
+/* ---- 3) Render current month ---- */
+const now = new Date();
+renderCalendar(now.getFullYear(), now.getMonth());
+</script>
+
+<p>Tip: only dates in <code>DOODLE_DATES</code> are clickable.</p>
+</div>
+
+<div id="doodle-display" class="hidden">
+  <table align="center" cellpadding="12" cellspacing="0">
+    <!-- TOP BORDER (wider) -->
+    <tr>
+      <td colspan="5" align="center">
+        ⊹˚₊‧────────────────────────────────────────────────────────────────────‧₊˚⊹
+      </td>
+    </tr>
+
+    <tr>
+      <!-- LEFT OUTER BORDER (ornamental) -->
+      <td valign="top" align="center">
+        ⊹<br>
+        ✧<br>
+        ˚<br>
+        ₊<br>
+        ‧<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        ‧<br>
+        ₊<br>
+        ˚<br>
+        ✧<br>
+        ⊹
+      </td>
+
+      <!-- TEXT SIDE -->
+      <td valign="top" width="396" style="font-size: 2em;">
+        <font face="MS PGothic,MS Gothic,Osaka,Meiryo,Hiragino Kaku Gothic ProN,Arial,sans-serif"><small>
+          <b id="doodle-title">2026-01-25</b><br><br>
+          <div id="doodle-journal">
+            Today's journal entry goes here.<br>
+            This side is for writing.<br>
+            It should feel quiet and personal.<br><br>
+
+            Short lines work best.<br>
+            Like a postcard message.
+          </div>
+        </small></font>
+      </td>
+
+      <!-- CENTER DIVIDER -->
+      <td valign="top" align="center">
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │<br>
+        ·<br>
+        │
+      </td>
+
+      <!-- ART SIDE -->
+      <td valign="top" width="440" align="center">
+        <img
+          id="doodle-img"
+          src="art/26-1-25.png"
+          width="400"
+          alt="Daily doodle"
+        >
+      </td>
+
+      <!-- RIGHT OUTER BORDER (mirrors left) -->
+      <td valign="top" align="center">
+        ⊹<br>
+        ✧<br>
+        ˚<br>
+        ₊<br>
+        ‧<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        │<br>
+        ‧<br>
+        ₊<br>
+        ˚<br>
+        ✧<br>
+        ⊹
+      </td>
+    </tr>
+
+    <!-- BOTTOM BORDER (wider) -->
+    <tr>
+      <td colspan="5" align="center">
+        ⊹˚₊‧────────────────────────────────────────────────────────────────────‧₊˚⊹
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="nav">
+  <a href="index.html"><img src="img/home2.png" alt="Home"></a><br>
+  <a href="calendar.html"><img src="img/calendar.png" alt="Calendar"></a><br>
+  <a href="media.html"><img src="img/media.png" alt="Media"></a><br>
+  <a href="archive.html"><img src="img/archive.png" alt="Archive"></a><br>
+  <a href="other.html"><img src="img/other.png" alt="Other"></a><br>
+  <a href="contact.html"><img src="img/contact.png" alt="Contact"></a><br>
+  <a href="blog.html">Blog</a><br>
+  <a href="art.html">Art</a>
+</div>
+</div>
+
+</body>
+</html>
