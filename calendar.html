@@ -33,17 +33,7 @@
 <h1>Doodle Calendar</h1>
 
 <script>
-/* ---- 1) Put your doodle dates here (start with ONE) ---- */
-const DOODLE_DATES = [
-  "2026-01-25"
-];
-
-/* ---- Journal entries for each date ---- */
-const JOURNAL_ENTRIES = {
-  "2026-01-25": "Today's journal entry goes here."
-};
-
-/* ---- 2) Calendar template core (simplified from the template's approach) ---- */
+/* ---- Calendar template core (simplified from the template's approach) ---- */
 const monthnames = [
   "January","February","March","April","May","June",
   "July","August","September","October","November","December"
@@ -61,24 +51,69 @@ function showDoodle(date) {
   const title = document.getElementById("doodle-title");
   const journal = document.getElementById("doodle-journal");
   
+  // Show the display area
   display.classList.remove("hidden");
   title.textContent = date;
   
-  // Use special filename for 2026-01-25 to match existing art asset
-  const imgSrc = (date === "2026-01-25") ? "art/26-1-25.png" : ("art/" + date + ".png");
-  img.src = imgSrc;
-  img.onerror = () => {
-    img.style.display = "none";
-  };
+  // Helper function to escape HTML and convert newlines to <br>
+  function escapeHtmlAndConvertNewlines(text) {
+    // Escape HTML entities first
+    const div = document.createElement('div');
+    div.textContent = text;
+    const escaped = div.innerHTML;
+    // Convert newlines to <br> tags (preserve line breaks)
+    return escaped.replace(/\n/g, "<br>");
+  }
+  
+  // Fetch journal entry with cache-busting
+  const entryPath = `entries/${date}.txt`;
+  const cacheBuster = '?v=' + Date.now();
+  
+  fetch(entryPath + cacheBuster, { cache: "no-store" })
+    .then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw new Error('Not found');
+      }
+    })
+    .then(text => {
+      journal.innerHTML = escapeHtmlAndConvertNewlines(text);
+      journal.style.display = "block";
+    })
+    .catch(() => {
+      journal.textContent = "(no journal entry)";
+      journal.style.display = "block";
+    });
+  
+  // Try to load image: PNG first, then JPG
+  const timestamp = Date.now();
+  const pngPath = `art/${date}.png?v=${timestamp}`;
+  const jpgPath = `art/${date}.jpg?v=${timestamp}`;
+  
+  // Reset image display
   img.style.display = "block";
   
-  // Show journal entry
-  if (JOURNAL_ENTRIES[date]) {
-    journal.innerHTML = JOURNAL_ENTRIES[date].replace(/\n/g, "<br>");
-    journal.style.display = "block";
-  } else {
-    journal.style.display = "none";
-  }
+  // Try PNG first
+  const testImg = new Image();
+  testImg.onload = function() {
+    img.src = pngPath;
+    img.style.display = "block";
+  };
+  testImg.onerror = function() {
+    // PNG failed, try JPG
+    const testJpg = new Image();
+    testJpg.onload = function() {
+      img.src = jpgPath;
+      img.style.display = "block";
+    };
+    testJpg.onerror = function() {
+      // Both failed, hide image
+      img.style.display = "none";
+    };
+    testJpg.src = jpgPath;
+  };
+  testImg.src = pngPath;
 }
 
 function renderCalendar(year, monthIndex) {
@@ -87,9 +122,6 @@ function renderCalendar(year, monthIndex) {
   const startDay = first.getDay(); // 0=Sun
   let daysInMonth = monthdays[monthIndex];
   if (monthIndex === 1 && isLeapYear(year)) daysInMonth = 29;
-
-  // Build quick lookup for dates that have doodles this month/year
-  const doodleSet = new Set(DOODLE_DATES);
 
   document.write(`<h2>${monthnames[monthIndex]} ${year}</h2>`);
   document.write(`<table border="2" cellpadding="8" cellspacing="0">`);
@@ -110,11 +142,8 @@ function renderCalendar(year, monthIndex) {
         const dd = String(day).padStart(2, "0");
         const iso = `${year}-${mm}-${dd}`;
 
-        if (doodleSet.has(iso)) {
-          document.write(`<td><a href="#" onclick="showDoodle('${iso}'); return false;">${day}</a></td>`);
-        } else {
-          document.write(`<td>${day}</td>`);
-        }
+        // All days are clickable
+        document.write(`<td><a href="#" onclick="showDoodle('${iso}'); return false;">${day}</a></td>`);
         day++;
       }
     }
@@ -129,8 +158,6 @@ function renderCalendar(year, monthIndex) {
 const now = new Date();
 renderCalendar(now.getFullYear(), now.getMonth());
 </script>
-
-<p>Tip: only dates in <code>DOODLE_DATES</code> are clickable.</p>
 </div>
 
 <div id="doodle-display" class="hidden">
