@@ -1,17 +1,166 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Home</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      font-family: "MS PGothic","MS Gothic","Osaka","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #111;
+      background: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    #container {
+      display: flex;
+      max-width: 1200px;
+      width: 100%;
+    }
+    #left {
+      width: 260px;
+      padding-right: 20px;
+    }
+    #center {
+      flex: 1;
+      padding: 0 20px;
+    }
+    #right {
+      width: 220px;
+      padding-left: 20px;
+    }
+    .block {
+      margin-bottom: 24px;
+    }
+    .title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .meta {
+      opacity: 0.85;
+      margin: 2px 0;
+    }
+    .meta a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .meta a:hover {
+      text-decoration: underline;
+    }
+    #featured-img {
+      max-width: 520px;
+      width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      margin: 8px 0;
+    }
+    #nav img {
+      height: 50px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    #updates-list {
+      opacity: 0.85;
+    }
+    .update-item {
+      display: block;
+      margin: 2px 0;
+      text-decoration: none;
+      color: inherit;
+    }
+    .update-item:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>Home</h1>
+
+<div id="container">
+  <div id="left">
+    <div id="identity" class="block">
+      <div class="title"> </div>
+      <div class="meta">art log + diary margin + misc</div>
+      <div class="meta">sketches, notes, links, archives</div>
+      <div class="meta">personal site / experiments / daily practice</div>
+    </div>
+
+    <div id="updates" class="block">
+      <div class="title">Updates</div>
+      <div id="updates-list">(loading…)</div>
+    </div>
+
+    <div id="sections" class="block">
+      <div class="title">Sections</div>
+      <div class="meta"><a href="calendar.html">Calendar</a> — daily sketches + notes</div>
+      <div class="meta"><a href="media.html">Media</a> — images / scans</div>
+      <div class="meta"><a href="archive.html">Archive</a> — browse by time or theme</div>
+      <div class="meta"><a href="other.html">Other</a> — scraps, links, experiments</div>
+      <div class="meta"><a href="contact.html">Contact</a> — contact info</div>
+    </div>
+  </div>
+
+  <div id="center">
+    <div id="featured" class="block">
+      <div class="title">Featured</div>
+      <img id="featured-img" src="img/home2.png" alt="featured character" />
+      <div class="meta">character illustration placeholder</div>
+    </div>
+  </div>
+
+  <div id="right">
+    <div id="nav">
+      <a href="index.html"><img src="img/home2.png" alt="Home"></a><br>
+      <a href="calendar.html"><img src="img/calendar.png" alt="Calendar"></a><br>
+      <a href="media.html"><img src="img/media.png" alt="Media"></a><br>
+      <a href="archive.html"><img src="img/archive.png" alt="Archive"></a><br>
+      <a href="other.html"><img src="img/other.png" alt="Other"></a><br>
+      <a href="contact.html"><img src="img/contact.png" alt="Contact"></a><br>
+    </div>
+  </div>
+</div>
+
+<script>
+// Load updates.json and populate #updates-list
+(async function() {
+  const updatesList = document.getElementById("updates-list");
   
-  <nav>
-    <a href="index.html">Index</a> |
-    <a href="calendar.html">Calendar</a> |
-    <a href="blog.html">Blog</a> |
-    <a href="art.html">Art</a>
-  </nav>
+  try {
+    const response = await fetch("updates.json", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error('Not found');
+    }
+    const updates = await response.json();
+    
+    if (updates.length === 0) {
+      updatesList.textContent = "(no updates yet)";
+      return;
+    }
+    
+    // Show max 8 items
+    const displayUpdates = updates.slice(0, 8);
+    updatesList.innerHTML = "";
+    
+    displayUpdates.forEach(update => {
+      const item = document.createElement(update.href ? "a" : "div");
+      item.className = "update-item";
+      
+      if (update.href) {
+        item.href = update.href;
+      }
+      
+      // Format: YYYY-MM-DD  type  text
+      item.textContent = `${update.date}  ${update.type}  ${update.text}`;
+      updatesList.appendChild(item);
+    });
+  } catch (error) {
+    updatesList.textContent = "(no updates yet)";
+  }
+})();
+</script>
+
 </body>
 </html>
